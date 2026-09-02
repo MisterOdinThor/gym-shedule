@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OPERAZIONE GRIZZLY // Scheda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1c1e15;
+    --bg-2: #23261a;
+    --panel: #2b2e20;
+    --panel-2: #333624;
+    --line: #4a4d35;
+    --khaki: #d8cfa8;
+    --khaki-dim: #9a9375;
+    --olive: #6b7d43;
+    --olive-2: #97b25a;
+    --brown: #7a5c3a;
+    --amber: #c9a227;
+    --stencil-shadow: rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{
+    background:
+      radial-gradient(ellipse at 10% -10%, rgba(107,125,67,0.14), transparent 50%),
+      radial-gradient(ellipse at 100% 100%, rgba(122,92,58,0.12), transparent 55%),
+      var(--bg);
+    color: var(--khaki);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .grain{
+    position: fixed; inset:0; pointer-events:none; opacity:0.05; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{ max-width: 1180px; margin: 0 auto; padding: 50px 24px 80px; position:relative; }
+
+  /* ---- HERO ---- */
+  .hero{ position:relative; display:flex; justify-content:space-between; align-items:flex-end; gap:28px;
+    padding-bottom: 30px; border-bottom: 3px double var(--line); margin-bottom: 40px; flex-wrap:wrap; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.3em;
+    color: var(--olive-2); text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{ content:''; width:24px; height:2px; background: var(--olive-2); display:inline-block; }
+  h1.title{
+    font-family:'Black Ops One', sans-serif; font-weight:400; text-transform:uppercase;
+    font-size: clamp(34px, 5.4vw, 62px); line-height:1.05; letter-spacing:0.01em;
+    color: var(--khaki); text-shadow: 3px 3px 0 var(--stencil-shadow);
+  }
+  h1.title span{ color: var(--olive-2); }
+  .sub{ margin-top:14px; color: var(--khaki-dim); font-size:15px; max-width:480px; line-height:1.55; font-weight:500; }
+
+  .stamp{
+    flex-shrink:0; width:112px; height:112px; border-radius:50%; border:3px solid var(--olive-2);
+    display:flex; align-items:center; justify-content:center; transform: rotate(-9deg);
+    position: relative; opacity:0.9;
+  }
+  .stamp::before{
+    content:''; position:absolute; inset:8px; border:1px dashed var(--olive-2); border-radius:50%; opacity:0.6;
+  }
+  .stamp-txt{
+    font-family:'JetBrains Mono', monospace; font-size:9.5px; letter-spacing:0.12em; text-align:center;
+    color: var(--olive-2); text-transform:uppercase; line-height:1.5;
+  }
+  .stamp-txt b{ display:block; font-family:'Black Ops One', sans-serif; font-size:15px; letter-spacing:0.02em; margin:2px 0; }
+
+  /* ---- LEGEND / AT-A-GLANCE STRIP ---- */
+  .legend{ display:flex; gap:22px; flex-wrap:wrap; margin-bottom: 34px; font-family:'JetBrains Mono', monospace; font-size:11.5px; color: var(--khaki-dim); text-transform:uppercase; letter-spacing:0.08em; }
+  .legend span{ display:flex; align-items:center; gap:7px; }
+  .dot{ width:9px; height:9px; border-radius:2px; display:inline-block; }
+  .dot.ok{ background: var(--olive-2); }
+  .dot.fail{ background: var(--amber); }
+  .legend .hint{ margin-left:auto; color: var(--olive-2); }
+
+  /* ---- GRID: everything visible at a glance ---- */
+  .grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 820px){ .grid{ grid-template-columns: 1fr; } }
+
+  .card{
+    background: var(--panel); border:1px solid var(--line); border-radius:4px; padding: 20px 22px;
+    position:relative; cursor:pointer; transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover{ border-color: var(--olive-2); }
+  .card-head{ display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+  .card-num{
+    font-family:'Black Ops One', sans-serif; font-size:34px; color: transparent;
+    -webkit-text-stroke: 1px var(--line); line-height:1; flex-shrink:0;
+  }
+  .card-label{ font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.2em; color: var(--olive-2); text-transform:uppercase; margin-bottom:4px; }
+  .card-title{ font-family:'Black Ops One', sans-serif; font-size:19px; text-transform:uppercase; letter-spacing:0.01em; color: var(--khaki); }
+  .new-flag{ font-family:'JetBrains Mono', monospace; font-size:9px; letter-spacing:0.1em; background: var(--amber); color: var(--bg); padding:2px 6px; border-radius:2px; margin-left:8px; vertical-align:middle; font-weight:700; }
+
+  .compact-list{ list-style:none; }
+  .compact-list li{
+    display:flex; justify-content:space-between; gap:10px; font-size:13.5px; padding:6px 0;
+    border-bottom: 1px dotted var(--line); color: var(--khaki-dim); font-weight:500;
+  }
+  .compact-list li:last-child{ border-bottom:none; }
+  .compact-list li b{ color: var(--khaki); font-weight:600; }
+  .compact-list .tag{ font-family:'JetBrains Mono', monospace; font-size:10.5px; flex-shrink:0; }
+  .compact-list .tag.ok{ color: var(--olive-2); }
+  .compact-list .tag.fail{ color: var(--amber); }
+
+  .expand-hint{
+    margin-top: 14px; font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.15em;
+    color: var(--olive-2); text-transform:uppercase; display:flex; align-items:center; gap:6px;
+  }
+  .expand-hint::after{ content:'⤢'; font-size:13px; }
+
+  /* ---- EXPANDED / ZOOM MODE ---- */
+  .backdrop{
+    position: fixed; inset:0; background: rgba(10,11,7,0.82); backdrop-filter: blur(2px);
+    opacity:0; pointer-events:none; transition: opacity 0.2s ease; z-index: 40;
+  }
+  .backdrop.show{ opacity:1; pointer-events:auto; }
+
+  .card.expanded{
+    position: fixed; inset: 4vh 6vw; z-index: 50; overflow-y:auto; cursor:default;
+    border-color: var(--olive-2); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    padding: 32px 34px 36px;
+  }
+  @media (max-width: 820px){ .card.expanded{ inset: 2vh 3vw; } }
+
+  .card .full{ display:none; }
+  .card.expanded .full{ display:block; }
+  .card.expanded .compact-list, .card.expanded .expand-hint{ display:none; }
+  .card.expanded .card-num{ font-size:60px; }
+  .card.expanded .card-title{ font-size:30px; }
+
+  .close-btn{
+    display:none; position:absolute; top:20px; right:20px; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--line); background: var(--panel-2); color: var(--khaki); font-size:16px;
+    align-items:center; justify-content:center; font-family:'JetBrains Mono', monospace;
+  }
+  .card.expanded .close-btn{ display:flex; }
+
+  .full-sub{ font-family:'JetBrains Mono', monospace; font-size:12px; color: var(--khaki-dim); margin-bottom:20px; letter-spacing:0.05em; }
+
+  .exlist{ border-top: 1px solid var(--line); margin-top: 18px; }
+  .ex{
+    display:grid; grid-template-columns: 30px 1fr auto; gap: 16px; align-items:center;
+    padding: 14px 2px; border-bottom: 1px solid var(--line);
+  }
+  .ex-idx{ font-family:'JetBrains Mono', monospace; color: var(--line); font-size:12px; }
+  .ex-name{ font-size:16.5px; font-weight:600; letter-spacing:0.01em; color: var(--khaki); }
+  .ex-note{ display:block; font-family:'JetBrains Mono', monospace; font-size:12px; color: var(--khaki-dim); margin-top:3px; font-weight:400; }
+  .ex-load{
+    font-family:'JetBrains Mono', monospace; font-size:13.5px; text-align:right; white-space:nowrap;
+    color: var(--khaki); background: var(--bg-2); border:1px solid var(--line);
+    padding: 6px 11px; border-radius:2px; min-width:115px;
+  }
+  .ex-load.fail{ color: var(--amber); border-color: rgba(201,162,39,0.4); }
+  .ex-load.ok{ color: var(--olive-2); border-color: rgba(151,178,90,0.4); }
+
+  .subblock{ margin: 24px 0 4px; padding: 16px 18px; border-left:3px solid var(--brown); background: rgba(122,92,58,0.1); }
+  .subblock-title{ font-family:'JetBrains Mono', monospace; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color: var(--brown); margin-bottom:10px; }
+
+  footer{
+    margin-top:50px; text-align:center; font-family:'JetBrains Mono', monospace; font-size:11px;
+    letter-spacing:0.28em; color: var(--line); text-transform:uppercase; padding-top: 26px; border-top: 1px solid var(--line);
+  }
+  footer b{ color: var(--olive-2); }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+<div class="backdrop" id="backdrop" onclick="closeAll()"></div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Operazione Grizzly · Field Manual</div>
+      <h1 class="title">TERRITORIO<br><span>ORSO BRUNO.</span></h1>
+      <p class="sub">Quattro missioni settimanali. Nessun ritiro prima del cedimento. Tocca una scheda per ingrandirla.</p>
+    </div>
+    <div class="stamp">
+      <div class="stamp-txt">Unità<b>GRIZZLY</b>Ops · 4gg</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><i class="dot ok"></i> Serie a target fisso</span>
+    <span><i class="dot fail"></i> Serie a cedimento</span>
+    <span class="hint">tocca una scheda per i dettagli ▸</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- DAY 1 -->
+    <div class="card" onclick="openCard(this)">
+      <button class="close-btn" onclick="event.stopPropagation(); closeAll();">✕</button>
+      <div class="card-head">
+        <div class="card-num">01</div>
+        <div>
+          <div class="card-label">Push</div>
+          <div class="card-title">Assalto Petto &amp; Bicipiti</div>
+        </div>
+      </div>
+
+      <ul class="compact-list">
+        <li>Panca inclinata <span class="tag ok">12×3</span></li>
+        <li>Croci con panca <span class="tag fail">fail×5</span></li>
+        <li>Croci basse + Bayesian curl <span class="tag fail">fail×5</span></li>
+        <li>Cyplekov <span class="tag fail">fail×4</span></li>
+        <li>Cigno di Nanto <span class="tag fail">fail×3</span></li>
+      </ul>
+      <div class="expand-hint">5 esercizi + piano B</div>
+
+      <div class="full">
+        <div class="full-sub">Petto × 3 esercizi &nbsp;·&nbsp; Bicipiti × 2 esercizi</div>
+        <div class="exlist">
+          <div class="ex"><div class="ex-idx">01</div><div><div class="ex-name">Panca inclinata</div><span class="ex-note">15 kg per lato</span></div><div class="ex-load ok">12 × 3</div></div>
+          <div class="ex"><div class="ex-idx">02</div><div><div class="ex-name">Croci con panca</div></div><div class="ex-load fail">14 kg · fail × 5</div></div>
+          <div class="ex"><div class="ex-idx">03</div><div><div class="ex-name">Croci basse (alto petto) + Bayesian curl</div><span class="ex-note">superset, 1 serie a coppia</span></div><div class="ex-load fail">14 kg · fail × 5 (×2 es.)</div></div>
+          <div class="ex"><div class="ex-idx">04</div><div><div class="ex-name">Cyplekov</div></div><div class="ex-load fail">fail × 4</div></div>
+          <div class="ex"><div class="ex-idx">05</div><div><div class="ex-name">Cigno di Nanto</div></div><div class="ex-load fail">fail × 3</div></div>
+        </div>
+        <div class="subblock">
+          <div class="subblock-title">Piano B — se i cavi non sono disponibili</div>
+          <div class="exlist">
+            <div class="ex"><div class="ex-idx">A</div><div><div class="ex-name">PECfly machine</div><span class="ex-note">sedile altezza max</span></div><div class="ex-load fail">59 kg · fail × 4</div></div>
+            <div class="ex"><div class="ex-idx">B</div><div><div class="ex-name">Chest press</div></div><div class="ex-load fail">fail × 2</div></div>
+            <div class="ex"><div class="ex-idx">C</div><div><div class="ex-name">Dips</div></div><div class="ex-load fail">fail × 3</div></div>
+            <div class="ex"><div class="ex-idx">D</div><div><div class="ex-name">Bicipiti cavo bilanciere <span style="color:var(--khaki-dim);font-weight:400;">/ curl manubrio a larrat</span></div></div><div class="ex-load fail">fail × 3</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 2 -->
+    <div class="card" onclick="openCard(this)">
+      <button class="close-btn" onclick="event.stopPropagation(); closeAll();">✕</button>
+      <div class="card-head">
+        <div class="card-num">02</div>
+        <div>
+          <div class="card-label">Pull</div>
+          <div class="card-title">Ritirata Dorsali &amp; Trapezi</div>
+        </div>
+      </div>
+
+      <ul class="compact-list">
+        <li>Trazioni con zavorra <span class="tag ok">7×3</span></li>
+        <li>Lat pulldown <span class="tag fail">fail×5</span></li>
+        <li>Lat row corda/neutra <span class="tag fail">fail×3</span></li>
+        <li>PECfly in piedi <span class="tag fail">fail×5</span></li>
+        <li>Cigno di Nanto <span class="tag fail">fail×3</span></li>
+      </ul>
+      <div class="expand-hint">7 esercizi</div>
+
+      <div class="full">
+        <div class="full-sub">Dorsali × 2 esercizi &nbsp;·&nbsp; Trapezi medi × 2 esercizi</div>
+        <div class="exlist">
+          <div class="ex"><div class="ex-idx">01</div><div><div class="ex-name">Trazioni con zavorra</div><span class="ex-note">20 kg</span></div><div class="ex-load ok">7 × 3</div></div>
+          <div class="ex"><div class="ex-idx">02</div><div><div class="ex-name">Lat pulldown</div></div><div class="ex-load fail">41 kg · fail × 5</div></div>
+          <div class="ex"><div class="ex-idx">03</div><div><div class="ex-name">Lat machine row, corda/presa neutra</div><span class="ex-note">focus trapezi medi</span></div><div class="ex-load fail">fail × 3</div></div>
+          <div class="ex"><div class="ex-idx">04</div><div><div class="ex-name">PECfly in piedi, presa interna</div><span class="ex-note">gomito ~90° in chiusura · trapezi medi</span></div><div class="ex-load fail">39 kg · fail × 5</div></div>
+          <div class="ex"><div class="ex-idx">05</div><div><div class="ex-name">Richiamo petto — PECfly</div></div><div class="ex-load fail">fail × 1</div></div>
+          <div class="ex"><div class="ex-idx">06</div><div><div class="ex-name">Richiamo indiretto — bicipiti &amp; deltoide</div></div><div class="ex-load">—</div></div>
+          <div class="ex"><div class="ex-idx">07</div><div><div class="ex-name">Cigno di Nanto</div></div><div class="ex-load fail">fail × 3</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 3 -->
+    <div class="card" onclick="openCard(this)">
+      <button class="close-btn" onclick="event.stopPropagation(); closeAll();">✕</button>
+      <div class="card-head">
+        <div class="card-num">03</div>
+        <div>
+          <div class="card-label">Legs</div>
+          <div class="card-title">Marcia sulle Zampe</div>
+        </div>
+      </div>
+
+      <ul class="compact-list">
+        <li>Leg press alta <span class="tag ok">8×3</span></li>
+        <li>Squat <span class="tag ok">8-10×3</span></li>
+        <li>Hip extension (femorali) <span class="tag fail">fail×2</span></li>
+        <li>Calf / Ext / Curl <span class="tag fail">fail×2 cad.</span></li>
+        <li>Cigno di Nanto <span class="tag fail">fail×3</span></li>
+      </ul>
+      <div class="expand-hint">8 esercizi</div>
+
+      <div class="full">
+        <div class="full-sub">Gambe + richiamo petto/bicipiti</div>
+        <div class="exlist">
+          <div class="ex"><div class="ex-idx">01</div><div><div class="ex-name">Leg press alta</div><span class="ex-note">7 kg per lato · scendere fino in fondo — #se occupata: squat al rack</span></div><div class="ex-load ok">8 × 3</div></div>
+          <div class="ex"><div class="ex-idx">02</div><div><div class="ex-name">Squat</div></div><div class="ex-load ok">8-10 × 3</div></div>
+          <div class="ex"><div class="ex-idx">03</div><div><div class="ex-name">Hip extension</div><span class="ex-note">per i femorali — sellino più basso</span></div><div class="ex-load fail">fail × 2</div></div>
+          <div class="ex"><div class="ex-idx">04</div><div><div class="ex-name">Calf raises</div></div><div class="ex-load fail">fail × 2</div></div>
+          <div class="ex"><div class="ex-idx">05</div><div><div class="ex-name">Leg extension</div></div><div class="ex-load fail">fail × 2</div></div>
+          <div class="ex"><div class="ex-idx">06</div><div><div class="ex-name">Leg curl</div></div><div class="ex-load fail">fail × 2</div></div>
+          <div class="ex"><div class="ex-idx">07</div><div><div class="ex-name">Richiamo petto e/o bicipiti</div></div><div class="ex-load fail">fail × 1</div></div>
+          <div class="ex"><div class="ex-idx">08</div><div><div class="ex-name">Cigno di Nanto</div></div><div class="ex-load fail">fail × 3</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAY 4 -->
+    <div class="card" onclick="openCard(this)">
+      <button class="close-btn" onclick="event.stopPropagation(); closeAll();">✕</button>
+      <div class="card-head">
+        <div class="card-num">04</div>
+        <div>
+          <div class="card-label">Shoulders</div>
+          <div class="card-title">Presidio delle Spalle</div>
+        </div>
+      </div>
+
+      <ul class="compact-list">
+        <li>Military press <span class="tag ok">8-10×4</span></li>
+        <li>Cigno di Nanto <span class="tag fail">fail×3</span></li>
+        <li>PECfly trapezi medi <span class="tag fail">fail×3</span></li>
+        <li>Richiamo schiena <span class="tag fail">fail×1</span></li>
+      </ul>
+      <div class="expand-hint">4 esercizi</div>
+
+      <div class="full">
+        <div class="full-sub">Spalle × 3 esercizi &nbsp;·&nbsp; Richiamo schiena</div>
+        <div class="exlist">
+          <div class="ex"><div class="ex-idx">01</div><div><div class="ex-name">Military press</div><span class="ex-note">seduto · spalle basse, no shrug — deltoide anteriore</span></div><div class="ex-load ok">8-10 × 4</div></div>
+          <div class="ex"><div class="ex-idx">02</div><div><div class="ex-name">Cigno di Nanto</div></div><div class="ex-load fail">fail × 3</div></div>
+          <div class="ex"><div class="ex-idx">03</div><div><div class="ex-name">PECfly in piedi, presa interna</div><span class="ex-note">trapezi medi + richiamo indiretto deltoide posteriore</span></div><div class="ex-load fail">fail × 3</div></div>
+          <div class="ex"><div class="ex-idx">04</div><div><div class="ex-name">Richiamo schiena</div><span class="ex-note">lat pulldown o row leggero</span></div><div class="ex-load fail">fail × 1</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>Operazione Grizzly — <b>tieni la posizione, colpisci a cedimento.</b></footer>
+</div>
+
+<script>
+  function openCard(card){
+    document.querySelectorAll('.card.expanded').forEach(c => { if(c!==card) c.classList.remove('expanded'); });
+    card.classList.add('expanded');
+    document.getElementById('backdrop').classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAll(){
+    document.querySelectorAll('.card.expanded').forEach(c => c.classList.remove('expanded'));
+    document.getElementById('backdrop').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeAll(); });
+</script>
+</body>
+</html>
